@@ -128,7 +128,7 @@ app.post('/reviews', authenticateToken, async (req, res) => {
         const book = await Book.findById(req.body.bookId);
         if (!book) return res.status(404).send('Book not found');
 
-        const review = new Review({ bookId: book._id, userId: req.user.userId, review: req.body.review });
+        const review = new Review({ bookId: book._id, review: req.body.review });
         await review.save();
         res.status(201).send('Review added');
     } catch (err) {
@@ -139,7 +139,7 @@ app.post('/reviews', authenticateToken, async (req, res) => {
 
 app.put('/reviews/:id', authenticateToken, async (req, res) => {
     try {
-        const review = await Review.findOne({ _id: req.params.id, userId: req.user.userId });
+        const review = await Review.findOne({ _id: req.params.id });
         if (!review) return res.status(404).send('Review not found');
 
         review.review = req.body.review;
@@ -153,7 +153,7 @@ app.put('/reviews/:id', authenticateToken, async (req, res) => {
 
 app.delete('/reviews/:id', authenticateToken, async (req, res) => {
     try {
-        const review = await Review.findOneAndDelete({ _id: req.params.id, userId: req.user.userId });
+        const review = await Review.findOneAndDelete({ _id: req.params.id });
         if (!review) return res.status(404).send('Review not found');
 
         res.send('Review deleted');
